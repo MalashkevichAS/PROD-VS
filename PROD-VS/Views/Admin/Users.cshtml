@@ -1,0 +1,77 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<User>
+
+<h2>Список пользователей</h2>
+
+<button onclick="showCreateForm()">Создать пользователя</button>
+<table>
+    <thead>
+        <tr>
+            <th>Login</th>
+            <th>Access Level</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.AccessLevel</td>
+                <td>
+                    <button onclick="showUpdatePasswordForm('@user.Id')">Изменить пароль</button>
+                    <button onclick="deleteUser('@user.Id')">Удалить пользователя</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="createUserForm" style="display:none;">
+    <h3>Создать пользователя</h3>
+    <form method="post" asp-action="CreateUser">
+        <label>Login:</label><input type="text" name="UserName" />
+        <label>Password:</label><input type="password" name="PasswordHash" />
+        <label>Access Level:</label>
+        <select name="AccessLevel">
+            <option value="Supervisor">Руководитель</option>
+            <option value="Engineer">Инженер</option>
+            <option value="PE">PE</option>
+            <option value="LQC">LQC</option>
+            <option value="RnD">RnD</option>
+            <option value="Production">Production</option>
+        </select>
+        <button type="submit">Создать</button>
+    </form>
+</div>
+
+<div id="updatePasswordForm" style="display:none;">
+    <h3>Изменить пароль</h3>
+    <form method="post" asp-action="UpdatePassword">
+        <input type="hidden" id="userId" name="id" />
+        <label>Новый пароль:</label><input type="password" name="newPassword" />
+        <button type="submit">Обновить</button>
+    </form>
+</div>
+
+<script>
+    function showCreateForm() {
+        document.getElementById('createUserForm').style.display = 'block';
+    }
+
+    function showUpdatePasswordForm(userId) {
+        document.getElementById('userId').value = userId;
+        document.getElementById('updatePasswordForm').style.display = 'block';
+    }
+
+    function deleteUser(userId) {
+        if (confirm('Вы уверены, что хотите удалить пользователя?')) {
+            fetch(`/Admin/DeleteUser?id=${userId}`, { method: 'POST' })
+                .then(() => window.location.reload());
+        }
+    }
+</script>
