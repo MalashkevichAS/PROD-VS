@@ -1,5 +1,7 @@
-﻿﻿@{
+﻿
+@{
     ViewData["Title"] = "Authorization";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
@@ -23,19 +25,24 @@
             <img src="https://cdn4.iconfinder.com/data/icons/miu/22/circle_close_delete_-128.png"></img>
         </span>
 
-        <form>
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+
+        <form method="post" asp-action="Login" asp-controller="Authorization">
             <input type="text" name="username" placeholder="User name">
             <input type="password" name="pass" placeholder="Password">
-            <a href="#">Log in</a>
+            <button type="submit">Log in</button>
             <div id="remember-container">
-                <input type="checkbox" id="checkbox-2-1" class="checkbox" checked="checked" />
+                <input type="checkbox" id="checkbox-2-1" class="checkbox" name="rememberMe" checked="checked" />
                 <span id="remember">Remember me</span>
-                <span id="forgotten">Forgotten password</span> <!-- TODO: Реализовать отправку сооьщение администратору о изменении пароля -->
+                <span id="forgotten">Forgotten password</span> <!-- TODO: Реализовать отправку сообщения администратору о изменении пароля -->
             </div>
         </form>
     </div>
 
-    <!-- TODO: Реализовать отправку сооьщение администратору о изменении пароля -->
+    <!-- TODO: Реализовать отправку сообщения администратору о изменении пароля -->
     <div id="forgotten-container">
         <h1>Forgotten</h1>
         <span class="close-btn">

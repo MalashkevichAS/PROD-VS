@@ -16,7 +16,8 @@ namespace PROD_VS.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+
+        public IActionResult AdminPanel()
         {
             return View();
         }
@@ -30,15 +31,26 @@ namespace PROD_VS.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(User newUser)
+        public async Task<IActionResult> CreateUser(string UserName, string FirstName, string LastName, string Password, string AccessLevel)
         {
-            newUser.IsDeveloper = false; // Ensure new user is not marked as developer
-            if (string.IsNullOrEmpty(newUser.LastName))
+            // Проверка обязательных полей
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(FirstName) || string.IsNullOrEmpty(LastName))
             {
-                return BadRequest("LastName is required");
+                return BadRequest("All fields are required");
             }
+
+            var newUser = new User
+            {
+                UserName = UserName,              
+                FirstName = FirstName,
+                LastName = LastName,
+                AccessLevel = AccessLevel,
+                IsDeveloper = false // Ensure new user is not marked as developer
+            };
+
             var passwordHasher = new PasswordHasher<User>();
-            newUser.PasswordHash = passwordHasher.HashPassword(newUser, newUser.PasswordHash); // Assuming PasswordHash contains the plain password
+            newUser.PasswordHash = passwordHasher.HashPassword(newUser, Password); // Assuming Password contains the plain password
+
             try
             {
                 _context.Users.Add(newUser);
@@ -56,6 +68,7 @@ namespace PROD_VS.Controllers
                 }
                 return StatusCode(500, "Internal server error");
             }
+
             return RedirectToAction("Users");
         }
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PROD_VS.Data;
+using PROD_VS.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<UserManager<User>>();
+builder.Services.AddScoped<SignInManager<User>>();
+
 builder.Services.AddControllersWithViews();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Authorization/Authorization";
+    options.AccessDeniedPath = "/Authorization/Authorization";
+});
 
 var app = builder.Build();
 
@@ -25,7 +40,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -42,12 +56,15 @@ app.MapControllerRoute(
     pattern: "{controller=Authorization}/{action=Authorization}/{id?}");
 app.MapControllerRoute(
     name: "admin",
-    pattern: "{controller=Admin}/{action=Index}/{id?}");
-
+    pattern: "{controller=Admin}/{action=AdminPanel}/{id?}");
+app.MapControllerRoute(
+    name: "Full",
+    pattern: "{controller=Admin}/{action=AdminPanel}/{id?}");
 
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     SeedData.Initialize(services);
 }
+
 app.Run();

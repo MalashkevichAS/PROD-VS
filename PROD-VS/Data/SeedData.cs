@@ -13,17 +13,18 @@ namespace PROD_VS.Data
             using (var context = new ApplicationDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
             {
-                if (context.Users.Any(u => u.UserName == "Aliaksandr"))
+                if (context.Users.Any(u => u.UserName == "Developer"))
                 {
                     return; // База данных уже инициализирована
                 }
 
                 var developer = new User
                 {
-                    UserName = "Aliaksandr",
+                    UserName = "Developer",
                     Email = "malashkevich.aliaksandr@gmail.com",
                     AccessLevel = "Full",
                     IsDeveloper = true,
+                    FirstName = "Aliaksandr",
                     LastName = "Malashkevich"
                 };
 
