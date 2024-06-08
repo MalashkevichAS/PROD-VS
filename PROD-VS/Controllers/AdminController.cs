@@ -33,10 +33,29 @@ namespace PROD_VS.Controllers
         public async Task<IActionResult> CreateUser(User newUser)
         {
             newUser.IsDeveloper = false; // Ensure new user is not marked as developer
+            if (string.IsNullOrEmpty(newUser.LastName))
+            {
+                return BadRequest("LastName is required");
+            }
             var passwordHasher = new PasswordHasher<User>();
             newUser.PasswordHash = passwordHasher.HashPassword(newUser, newUser.PasswordHash); // Assuming PasswordHash contains the plain password
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Логирование ошибки или вывод подробностей для отладки
+                Console.WriteLine($"Error saving changes: {ex.Message}");
+                var innerException = ex.InnerException;
+                while (innerException != null)
+                {
+                    Console.WriteLine(innerException.Message);
+                    innerException = innerException.InnerException;
+                }
+                return StatusCode(500, "Internal server error");
+            }
             return RedirectToAction("Users");
         }
 

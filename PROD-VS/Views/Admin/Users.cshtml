@@ -11,7 +11,8 @@
 <table>
     <thead>
         <tr>
-            <th>Login</th>
+            <th>User Name</th>
+            <th>Last Name</th>
             <th>Access Level</th>
             <th>Actions</th>
         </tr>
@@ -21,6 +22,7 @@
         {
             <tr>
                 <td>@user.UserName</td>
+                <td>@user.LastName</td>
                 <td>@user.AccessLevel</td>
                 <td>
                     <button onclick="showUpdatePasswordForm('@user.Id')">Изменить пароль</button>
@@ -34,18 +36,19 @@
 <div id="createUserForm" style="display:none;">
     <h3>Создать пользователя</h3>
     <form method="post" asp-action="CreateUser">
-        <label>Login:</label><input type="text" name="UserName" />
+        <label>User Name :</label><input type="text" name="UserName" />
+        <label>Last Name :</label><input type="text" name="LastName" />
         <label>Password:</label><input type="password" name="PasswordHash" />
         <label>Access Level:</label>
         <select name="AccessLevel">
-            <option value="Supervisor">Руководитель</option>
-            <option value="Engineer">Инженер</option>
+            <option value="Supervisor">Supervisor</option>
+            <option value="Engineer">Engineer</option>
             <option value="PE">PE</option>
             <option value="LQC">LQC</option>
             <option value="RnD">RnD</option>
             <option value="Production">Production</option>
         </select>
-        <button type="submit">Создать</button>
+        <button type="submit">Сreate</button>
     </form>
 </div>
 

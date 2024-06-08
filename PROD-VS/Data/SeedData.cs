@@ -13,17 +13,18 @@ namespace PROD_VS.Data
             using (var context = new ApplicationDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
             {
-                if (context.Users.Any(u => u.UserName == "Developer"))
+                if (context.Users.Any(u => u.UserName == "Aliaksandr"))
                 {
                     return; // База данных уже инициализирована
                 }
 
                 var developer = new User
                 {
-                    UserName = "Developer",
+                    UserName = "Aliaksandr",
                     Email = "malashkevich.aliaksandr@gmail.com",
                     AccessLevel = "Full",
-                    IsDeveloper = true
+                    IsDeveloper = true,
+                    LastName = "Malashkevich"
                 };
 
                 var passwordHasher = new PasswordHasher<User>();

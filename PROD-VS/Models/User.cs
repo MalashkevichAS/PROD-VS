@@ -6,6 +6,9 @@ namespace PROD_VS.Models
     {
         public string AccessLevel { get; set; } = "User"; // e.g., "Руководитель", "Инженер", etc.
         public bool IsDeveloper { get; set; } = false; // New flag for developer
+        
+        [Required]
+        public string LastName { get; set; }
     }
 }
 
