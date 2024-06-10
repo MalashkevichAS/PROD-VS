@@ -9,38 +9,35 @@
     <title>@ViewData["Title"] - My ASP.NET Application</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/navbar.css" />
 </head>
 <body>
     @if (ViewContext.RouteData.Values["controller"].ToString() != "Authorization")
     {
         <div class="container">
             <header>
-                <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                    <a class="navbar-brand" href="/">My ASP.NET Application</a>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav">
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                <li class="nav-item">
-                                    <form asp-area="" asp-controller="Authorization" asp-action="Logout" method="post" id="logoutForm" class="form-inline">
-                                        <button type="submit" class="btn btn-link">Logout</button>
-                                    </form>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Authorization" asp-action="Authorization">Login</a>
-                                </li>
-                            }
-                        </ul>
+                <div class="navbar">
+                    <div class="menu-container">
+                        <button id="menuButton">MENU</button>
                     </div>
-                </nav>
+                    <div class="title-container">
+                        PROD-VS
+                    </div>
+                    <div class="time-container">
+                        <span id="time"></span>
+                        <br>
+                        <span id="date"></span>
+                    </div>
+                    <div class="tabs-container" id="tabsContainer">
+                        <!-- Здесь будут отображаться открытые вкладки -->
+                    </div>
+                </div>
+                <div id="sideMenu" class="side-menu">
+                    <a href="javascript:void(0)" class="close-btn">&times;</a>
+                    <a href="#" id="homeButton">Home</a>
+                    <a href="#" id="privateButton">Private</a>
+                </div>
+                
             </header>
             <main role="main" class="pb-3">
                 @RenderBody()
@@ -55,6 +52,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/navbar.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
